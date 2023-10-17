@@ -1,0 +1,16 @@
+{% extends 'layouts/main.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block body %}
+
+    <h1>{{ article.title }}</h1>
+    {% if article.image %}
+        <p>{{ article.image }}</p>
+    {% else %}
+        <p>Картинка</p>
+    {% endif %}
+    {{ article.text }}<br>
+    Уникальных просмотров: {{ article.views }}<br>
+
+{% endblock %}
