@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Главная страница новостей{% endblock %}
+
+{% block body %}
+
+    {% for article in articles %}
+        {{ article.title }}
+        <hr>
+    {% endfor %}
+
+{% endblock %}
