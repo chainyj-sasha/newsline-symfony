@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Создание новой статьи</title>
+</head>
+<body>
+
+{{ form_start(form) }}
+
+<div class="row">
+    <div class="col">
+        {{ form_label(form.title, 'Заголовок статьи') }}
+        {{ form_errors(form.title) }}
+        {{ form_widget(form.title) }}
+    </div>
+    <div class="col">
+        {{ form_label(form.preview, 'Превью статьи') }}
+        {{ form_errors(form.preview) }}
+        {{ form_widget(form.preview) }}
+    </div>
+    <div class="col">
+        {{ form_label(form.text, 'Текст статьи') }}
+        {{ form_errors(form.text) }}
+        {{ form_widget(form.text) }}
+    </div>
+    <div class="col">
+        {{ form_label(form.image, 'Добавить изображение') }}
+        {{ form_widget(form.image) }}
+    </div>
+
+</div>
+
+<input type="submit" value="Сохранить">
+{{ form_end(form) }}
+
+</body>
+</html>
