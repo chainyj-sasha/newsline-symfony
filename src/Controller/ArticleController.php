@@ -16,7 +16,7 @@ class ArticleController extends AbstractController
         $this->articleRepository = $articleRepository;
     }
 
-    #[Route('/articles', name: 'all_article')]
+    #[Route('/', name: 'all_article')]
     public function index(): Response
     {
         $articles = $this->articleRepository->findAll();
