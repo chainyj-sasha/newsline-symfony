@@ -12,6 +12,6 @@
     {% endif %}
     {{ article.text }}<br>
     Уникальных просмотров: {{ article.views }}<br>
-    <img src="{{ asset('1.jpg') }}" alt="pic">
+    <img src="{{ asset(article.image) }}" alt="pic">
 
 {% endblock %}

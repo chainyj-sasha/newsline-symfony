@@ -20,11 +20,20 @@ class ArticleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            dd($request);
+
+            //----- сделать отдельный метод сервита для работы с изображением -----//
+            $image = $request->files->get('article')['image'];                                    // получаем катринку из реквеста (article - это form_name)
+            $path = $this->getParameter('kernel.project_dir') . '/public/uploads/images';      // определяем место где будет храниться изображение '/public/uploads/images'
+            $imageName = uniqid() . $image->getClientOriginalName();                                // Получаем оригинальное имя картинки
+            $image->move($path, $imageName);                                                        // Переносим картинку $imageName в папку $path
+
+            //---------//
+
             $article = new Article();
             $article->setTitle($data->getTitle());
             $article->setPreview($data->getPreview());
             $article->setText($data->getText());
+            $article->setImage($imageName);
             $article->setViews(0);
             $article->setCreatedAt(new \DateTime());
 
