@@ -75,7 +75,7 @@ class Article
 
     public function getImage(): ?string
     {
-        return $this->image;
+        return '/uploads/images/' . $this->image;
     }
 
     public function setImage(?string $image): static
