@@ -26,7 +26,7 @@ class Article
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $views = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -75,7 +75,7 @@ class Article
 
     public function getImage(): ?string
     {
-        return '/uploads/images/' . $this->image;
+        return $this->image;
     }
 
     public function setImage(?string $image): static
@@ -90,7 +90,7 @@ class Article
         return $this->views;
     }
 
-    public function setViews(int $views): static
+    public function setViews(?int $views): static
     {
         $this->views = $views;
 
