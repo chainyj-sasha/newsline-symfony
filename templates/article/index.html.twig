@@ -8,6 +8,16 @@
         {{ article.createdAt|date('Y-m-d H:i:s') }} - {{ article.title }}<br>
         {{ article.preview }}<br>
         <a href="{{ path('show_one_article', {id: article.id}) }}">Подробнее</a>
+
+        <div>
+            <a href="{{ path('app_admin_article_edit', {'id': article.id}) }}">Редактировать</a>
+        </div>
+        <form action="{{ path('app_admin_article_delete', {'id': article.id}) }}" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="Удалить">
+        </form>
+
+        
         <hr>
     {% endfor %}
 
