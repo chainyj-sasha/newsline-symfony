@@ -87,4 +87,12 @@ class ArticleController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    #[Route('/admin/article/{id}/delete', name: 'app_admin_article_delete')]
+    public function delete(Article $article, EntityManagerInterface $entityManager)
+    {
+        $entityManager->remove($article);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('all_article');
+    }
 }
