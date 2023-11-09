@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\ArticleRepository;
+use App\Services\Interface\ArticleServiceInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,32 +11,26 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-    private ArticleRepository $articleRepository;
+    private ArticleServiceInterface $articleService;
 
-    public function __construct(ArticleRepository $articleRepository)
+    public function __construct(ArticleServiceInterface $articleService)
     {
-        $this->articleRepository = $articleRepository;
+        $this->articleService = $articleService;
     }
 
     #[Route('/', name: 'all_article')]
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
-        $query = $this->articleRepository->findAll();
-
-        $articles = $paginator->paginate(
-            $query,
-            $request->query->getInt('page', 1),
-            10,
-        );
+        $articles = $this->articleService->getAllArticles($request, $paginator);
 
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
         ]);
     }
     #[Route('/article/{id}', name: 'show_one_article')]
-    public function show($id)
+    public function show($id): Response
     {
-        $article = $this->articleRepository->find($id);
+        $article = $this->articleService->getOneArticle($id);
 
         return $this->render('article/show.html.twig', [
             'article' => $article,

@@ -5,42 +5,30 @@ namespace App\Controller\Admin;
 use App\Entity\Article;
 use App\Form\ArticleEditType;
 use App\Form\ArticleType;
+use App\Services\Interface\ArticleServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-    public function __construct()
-    {}
+    private ArticleServiceInterface $articleService;
+    public function __construct(ArticleServiceInterface $articleService)
+    {
+        $this->articleService = $articleService;
+    }
 
     #[Route('/admin/article/create', name: 'app_admin_article_create')]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, KernelInterface $kernel): Response
     {
         $form = $this->createForm(ArticleType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $article = $form->getData();
-
-            //----- сделать отдельный метод сервита для работы с изображением -----//
-
-            $image = $request->files->get('article')['image'];                                    // получаем катринку из реквеста (article - это form_name)
-            $path = $this->getParameter('kernel.project_dir') . '/public/uploads/images';      // определяем место где будет храниться изображение '/public/uploads/images'
-            $imageName = 'uploads/images/' . uniqid() . $image->getClientOriginalName();                                // Получаем оригинальное имя картинки
-            $image->move($path, $imageName);                                                        // Переносим картинку $imageName в папку $path
-
-            //---------//
-
-            $article->setImage($imageName);
-            $article->setViews(0);
-            $article->setCreatedAt(new \DateTime());
-
-            $entityManager->persist($article);
-            $entityManager->flush();
-
+        if ($this->articleService->articleStore($request, $form)) {
             return $this->redirectToRoute('all_article');
         }
 
@@ -60,7 +48,24 @@ class ArticleController extends AbstractController
 
 //----- Переделать этот метод, не нравится мне он -----//
 
-            if (!$request->get('delete')) {
+            if ($request->get('delete')) {
+                $article->setImage(null);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_admin_article_edit', ['id' => $article->getId()]);
+            }
+
+            $image = $request->files->get('article_edit')['image'];
+            if ($image) {
+                $this->articleService->saveImage($image, $article);
+            } else {
+                $article->setImage($oldArticleImage);
+            }
+
+            $entityManager->flush();
+
+
+            /*if (!$request->get('delete')) {
                 $image = $request->files->get('article_edit')['image'];
 
                 if ($image) {
@@ -79,7 +84,7 @@ class ArticleController extends AbstractController
             $article->setImage(null);
 
             $entityManager->flush();
-            return $this->redirectToRoute('app_admin_article_edit', ['id' => $article->getId()]);
+            return $this->redirectToRoute('app_admin_article_edit', ['id' => $article->getId()]);*/
         }
 
         return $this->render('admin/article/edit.html.twig', [
@@ -88,10 +93,9 @@ class ArticleController extends AbstractController
         ]);
     }
     #[Route('/admin/article/{id}/delete', name: 'app_admin_article_delete')]
-    public function delete(Article $article, EntityManagerInterface $entityManager)
+    public function delete(Article $article): RedirectResponse
     {
-        $entityManager->remove($article);
-        $entityManager->flush();
+        $this->articleService->deleteArticle($article);
 
         return $this->redirectToRoute('all_article');
     }
