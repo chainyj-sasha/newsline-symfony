@@ -6,6 +6,7 @@ use App\Entity\Article;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 
 interface ArticleServiceInterface
 {
@@ -18,4 +19,7 @@ interface ArticleServiceInterface
     public function deleteArticle(Article $article): void;
 
     public function saveImage($image, Article $article): void;
+
+    public function addView(Article $article): void;
+
 }

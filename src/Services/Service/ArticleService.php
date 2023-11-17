@@ -15,10 +15,13 @@ class ArticleService implements ArticleServiceInterface
 {
     private ArticleRepository $articleRepository;
     private EntityManagerInterface $entityManager;
-
     private KernelInterface $kernel;
 
-    public function __construct(ArticleRepository $articleRepository, EntityManagerInterface $entityManager, KernelInterface $kernel)
+    public function __construct(
+        ArticleRepository $articleRepository,
+        EntityManagerInterface $entityManager,
+        KernelInterface $kernel,
+    )
     {
         $this->articleRepository = $articleRepository;
         $this->entityManager = $entityManager;
@@ -77,5 +80,11 @@ class ArticleService implements ArticleServiceInterface
         $article->setImage($imageName);
     }
 
+    public function addView(Article $article): void
+    {
+        $views = $article->getViews() + 1;
+        $article->setViews($views);
+        $this->entityManager->flush();
+    }
 
 }
