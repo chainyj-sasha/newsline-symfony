@@ -1,21 +1,17 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Редактирование статьи</title>
-</head>
-<body>
+{% extends 'layouts/main.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block body %}
 
 <h1>Страница редактирования статьи</h1>
 
+<div class="container mt-4">
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
 <div class="row">
     <div class="col">
-        {{ form_label(form.title, 'Заголовок статьи') }}
+        {{ form_label(form.title) }}
         {{ form_errors(form.title) }}
         {{ form_widget(form.title) }}
     </div>
@@ -51,5 +47,7 @@
 <input type="submit" value="Сохранить">
 
 {{ form_end(form) }}
-</body>
-</html>
+
+</div>
+
+{% endblock %}

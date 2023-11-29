@@ -4,25 +4,61 @@
 
 {% block body %}
 
+{#    {% for article in articles %}#}
+{#        {{ article.createdAt|date('Y-m-d H:i:s') }} - {{ article.title }}<br>#}
+{#        {{ article.preview }}<br>#}
+{#        Колличество просмотров: {{ article.views }}<br>#}
+{#        <a href="{{ path('show_one_article', {id: article.id}) }}">Подробнее</a>#}
+
+{#        {% if is_granted('IS_AUTHENTICATED_FULLY') %}#}
+{#            <div>#}
+{#                <a href="{{ path('app_admin_article_edit', {'id': article.id}) }}">Редактировать</a>#}
+{#            </div>#}
+{#            <form action="{{ path('app_admin_article_delete', {'id': article.id}) }}" method="post">#}
+{#                <input type="hidden" name="_method" value="DELETE">#}
+{#                <input type="submit" value="Удалить">#}
+{#            </form>#}
+{#        {% endif %}#}
+{#        <hr>     #}
+{#        #}
+{#    {% endfor %}#}
+
+
+<div class="container mt-4">
+    <h1>Лента новостей</h1>
+
     {% for article in articles %}
-        {{ article.createdAt|date('Y-m-d H:i:s') }} - {{ article.title }}<br>
-        {{ article.preview }}<br>
-        <a href="{{ path('show_one_article', {id: article.id}) }}">Подробнее</a>
-
-        <div>
-            <a href="{{ path('app_admin_article_edit', {'id': article.id}) }}">Редактировать</a>
+    <!-- Example News Card -->
+    <div class="card mb-3 shadow p-3 mb-5 bg-body-tertiary rounded">
+        <div class="card-header">
+            <span class="fw-lighter fst-italic">{{ article.createdAt|date('Y-m-d H:i:s') }}</span> - <span class="fs-4 fw-bold">{{ article.title }}</span>
         </div>
-        <form action="{{ path('app_admin_article_delete', {'id': article.id}) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE">
-            <input type="submit" value="Удалить">
-        </form>
-
-        
-        <hr>
+        <div class="card-body">
+            <p class="card-text">{{ article.preview }}</p>
+            <p class="card-text"><strong>Просмотры:</strong> {{ article.views }}</p>
+            <div class="btn-group" role="group">
+                <a type="button" class="btn btn-outline-secondary" href="{{ path('show_one_article', {id: article.id}) }}">Просмотр</a>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a class="btn btn-outline-secondary" href="{{ path('app_admin_article_edit', {'id': article.id}) }}">Редактировать</a>
+                    <form action="{{ path('app_admin_article_delete', {'id': article.id}) }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="submit" class="btn btn-outline-danger" value="Удалить">
+                    </form>
+{#                    <button type="button" class="btn btn-outline-secondary">Редактировать</button>#}
+{#                    <button type="button" class="btn btn-outline-danger">Удалить</button>#}
+                {% endif %}
+            </div>
+        </div>
+    </div>
     {% endfor %}
 
     <div class="pagination">
         {{ knp_pagination_render(articles) }}
     </div>
+</div>
+
+
+
+
 
 {% endblock %}

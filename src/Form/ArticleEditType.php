@@ -16,9 +16,22 @@ class ArticleEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class)
-            ->add('preview', TextType::class)
-            ->add('text', TextareaType::class)
+            ->add('title', TextType::class, [
+                'label' => 'Заголовок статьи',
+                'attr' => [
+                    'style' => 'width: 1000px; height: 30px',
+                ]
+            ])
+            ->add('preview', TextType::class, [
+                'attr' => [
+                    'style' => 'width: 1000px; height: 30px',
+                ]
+            ])
+            ->add('text', TextareaType::class, [
+                'attr' => [
+                    'style' => 'width: 1000px; height: 300px',
+                ]
+            ])
             ->add('image', FileType::class, [
                 'data_class' => null,
 //                'required' => false,

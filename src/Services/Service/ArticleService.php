@@ -30,12 +30,14 @@ class ArticleService implements ArticleServiceInterface
 
     public function getAllArticles(Request $request, PaginatorInterface $paginator): PaginationInterface
     {
-        $query = $this->articleRepository->findAll();
+        $query = $this->articleRepository->createQueryBuilder('e')
+            ->orderBy('e.created_at', 'DESC')
+            ->getQuery();
 
         return $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10,
+            5,
         );
     }
 
