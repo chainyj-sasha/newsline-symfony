@@ -13,7 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route('/admin/article')]
+#[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 class ArticleController extends AbstractController
 {
     private ArticleServiceInterface $articleService;
@@ -22,7 +25,7 @@ class ArticleController extends AbstractController
         $this->articleService = $articleService;
     }
 
-    #[Route('/admin/article/create', name: 'app_admin_article_create')]
+    #[Route('/create', name: 'app_admin_article_create')]
     public function create(Request $request, KernelInterface $kernel): Response
     {
         $form = $this->createForm(ArticleType::class);
@@ -37,7 +40,7 @@ class ArticleController extends AbstractController
         ]);
 
     }
-    #[Route('/admin/article/{id}/edit', name: 'app_admin_article_edit')]
+    #[Route('/{id}/edit', name: 'app_admin_article_edit')]
     public function edit(Article $article, Request $request, EntityManagerInterface $entityManager): Response
     {
         $oldArticleImage = $article->getImage();
@@ -92,7 +95,7 @@ class ArticleController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    #[Route('/admin/article/{id}/delete', name: 'app_admin_article_delete')]
+    #[Route('/{id}/delete', name: 'app_admin_article_delete')]
     public function delete(Article $article): RedirectResponse
     {
         $this->articleService->deleteArticle($article);

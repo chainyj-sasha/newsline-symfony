@@ -4,14 +4,34 @@
 
 {% block body %}
 
-    <h1>{{ article.title }}</h1>
+{#    <h1>{{ article.title }}</h1>#}
 
-    {{ article.text }}<br>
+{#    {{ article.text }}<br>#}
 
-    Уникальных просмотров: {{ article.views }}<br>
+{#    Уникальных просмотров: {{ article.views }}<br>#}
 
-    {% if article.image is not null %}
-        <img src="{{ asset(article.image) }}" alt="pic">
-    {% endif %}
+{#    {% if article.image is not null %}#}
+{#        <img src="{{ asset(article.image) }}" alt="pic">#}
+{#    {% endif %}#}
+
+    <div class="container mt-4">
+        <h1>{{ article.title }}</h1>
+
+        <!-- News Article Card -->
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">{{ article.preview }}</h2>
+                {% if article.image is not null %}
+                    <img src="{{ asset(article.image) }}" class="card-img-top mb-3" alt="Article Image">
+                {% endif %}
+                <p class="card-text">
+                    {{ article.text }}
+                </p>
+                <p class="card-text"><strong>Просмотры:</strong> {{ article.views }}</p>
+            </div>
+        </div>
+        <!-- End News Article Card -->
+
+    </div>
 
 {% endblock %}
